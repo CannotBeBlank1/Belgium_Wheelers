@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const banner = document.querySelector('.banner');
 
     function changeBannerImage() {
-        banner.style.backgroundImage = `url(${bannerImages[currentImageIndex]})`;
+        banner.style.backgroundImage = `https://cannotbeblank1.github.io/Belgium_Wheelers/(${bannerImages[currentImageIndex]})`;
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
 
