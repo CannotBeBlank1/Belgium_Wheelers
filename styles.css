@@ -103,3 +103,10 @@ footer {
     position: relative;
     transition: background-image 1s ease-in-out; /* Transition pour changer d'image en douceur */
 }
+.banner-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100px; /* Ajustez cette valeur en fonction de la taille désirée du logo */
+}
