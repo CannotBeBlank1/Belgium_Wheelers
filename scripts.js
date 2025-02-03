@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Code pour la bannière d'images
-    const bannerImages = ['image1.jpg', 'image2.jpg', 'image3.jpg']; // Ajouter les URLs des images
+    const bannerImages = ['assets/images/Head-Green-1.png', 'assets/images/Head-Mauve-1.png', 'assets/images/Head-Orange-1.png', 'assets/images/Head-Pink-1.png', 'assets/images/Head-Yellow-1.png']; // Ajouter les URLs des images
     let currentImageIndex = 0;
     const banner = document.querySelector('.banner');
 
