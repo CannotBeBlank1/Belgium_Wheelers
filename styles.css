@@ -7,12 +7,91 @@ body {
 }
 
 h1 {
-    color: #333;
+    color: red; /* Modification de la couleur du titre */
 }
-body {
-    font-family: Arial, sans-serif;
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #333;
+}
+
+.hamburger-menu {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px 0;
+    transition: 0.4s;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: -100%;
+    background-color: #333;
+    width: 100%;
     text-align: center;
-    background-color: #f0f0f0;
-    margin: 0;
+    transition: left 0.3s;
+}
+
+.nav-links li {
+    margin: 1rem 0;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+.nav-links.nav-active {
+    left: 0;
+}
+
+@media (min-width: 768px) {
+    .nav-links {
+        flex-direction: row;
+        position: static;
+        width: auto;
+    }
+
+    .nav-links li {
+        margin: 0 1rem;
+    }
+
+    .hamburger-menu {
+        display: none;
+    }
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.contact-info {
+    list-style: none;
     padding: 0;
+}
+
+.contact-info li {
+    margin: 0.5rem 0;
+}
+
+.contact-info a {
+    color: white;
+    text-decoration: none;
 }
