@@ -28,14 +28,18 @@
         <h1>Index</h1>
         <!-- Contenu de la page Index -->
     </main>
-    <footer>
-        <p>Contactez-nous:</p>
-        <ul class="contact-info">
-            <li><a href="https://www.facebook.com/share/1KyHpKj4Vk/">Facebook</a></li>
-            <li><a href="https://www.instagram.com/belgiumwheelers.asbl.vzw?igsh=eWZ6MGJnNXpkNnVz">Instagram</a></li>
-            <li><a href="mailto:choukesauvage@gmail.com">Email</a></li>
-        </ul>
-    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'footer.html', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById('footer-placeholder').innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        });
+    </script>
     <script src="scripts.js"></script>
 </body>
 </html>
