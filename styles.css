@@ -22,6 +22,8 @@ h1 {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    z-index: 20; /* Assurez-vous que le menu hamburger est au-dessus des autres éléments */
+
 }
 
 .bar {
@@ -46,6 +48,10 @@ h1 {
     z-index: 10; /* Add this line to ensure it's above other elements */
 }
 
+.nav-links.nav-active {
+    left: 0;
+}
+
 .nav-links li {
     margin: 1rem 0;
 }
@@ -54,10 +60,6 @@ h1 {
     color: white;
     text-decoration: none;
     font-size: 1.5rem;
-}
-
-.nav-links.nav-active {
-    left: 0;
 }
 
 @media (min-width: 768px) {
