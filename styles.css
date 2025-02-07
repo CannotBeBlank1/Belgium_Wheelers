@@ -60,7 +60,7 @@ h1 {
     position: absolute;
     top: 60px;
     left: -100%;
-    background-color: #333;
+    background-color: #333;/* Couleur de fond du menu */
     width: 100%;
     text-align: center;
     transition: left 0.3s;
