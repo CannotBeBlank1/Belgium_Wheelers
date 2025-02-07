@@ -26,6 +26,25 @@ h1 {
 
 }
 
+#language-selector {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    border: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#language-selector option {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    padding: 10px 20px;
+}
+
+
 .bar {
     width: 25px;
     height: 3px;
