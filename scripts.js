@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
         navLinks.classList.toggle('nav-active');
     });
 
+    hamburger.addEventListener('click', () => {
+    console.log('Hamburger menu clicked');
+    navLinks.classList.toggle('nav-active');
+    });
+
     // Code pour la bannière d'images
     const bannerImages = [
         'assets/images/Head-Green-1.png',
