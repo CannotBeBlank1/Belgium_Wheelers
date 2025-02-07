@@ -68,7 +68,7 @@ h1 {
 }
 
 .nav-links.nav-active {
-    left: 0;
+    left: 0; /* Affiche le menu en le ramenant dans la vue */
 }
 
 .nav-links li {
