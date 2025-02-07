@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Hamburger menu clicked');
         navLinks.classList.toggle('nav-active');
         console.log(navLinks.classList);
+        console.log('nav-links classes:', navLinks.classList);
+        console.log('nav-links left:', getComputedStyle(navLinks).left);
+
     });
 
     hamburger.addEventListener('click', () => {
