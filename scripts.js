@@ -26,14 +26,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
 
-    var languageSelector = document.getElementById('language-selector');
-    if (languageSelector) {
-        languageSelector.addEventListener('change', function() {
-            var selectedLanguage = languageSelector.value;
-            loadLanguageFile(selectedLanguage);
-        });
-    }
-    
+    // Charger le sélecteur de langue
+    var languagePlaceholder = document.getElementById('language-selector-placeholder');
+    var xhrLanguage = new XMLHttpRequest();
+    xhrLanguage.open('GET', 'language-selector.html', true);
+    xhrLanguage.onreadystatechange = function() {
+        if (xhrLanguage.readyState === 4 && xhrLanguage.status === 200) {
+            languagePlaceholder.innerHTML = xhrLanguage.responseText;
+
+            var languageSelector = document.getElementById('language-selector');
+            languageSelector.addEventListener('change', function() {
+                var selectedLanguage = languageSelector.value;
+                loadLanguageFile(selectedLanguage);
+            });
+        }
+    };
+    xhrLanguage.send();
+
     function loadLanguageFile(language) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'locales/' + language + '.json', true);
@@ -45,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         xhr.send();
     }
-    
+
     function applyTranslations(translations) {
         document.querySelectorAll('[data-translate-key]').forEach(function(element) {
             var key = element.getAttribute('data-translate-key');
@@ -54,5 +63,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
 });
