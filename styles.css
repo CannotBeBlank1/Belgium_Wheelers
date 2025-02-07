@@ -88,8 +88,8 @@ h1 {
         width: auto;
     }
 
-    .nav-links li {
-        margin: 0 1rem;
+    .nav-links.nav-active {
+        left: auto;
     }
 
     .hamburger-menu {
