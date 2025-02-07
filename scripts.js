@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelector('.nav-links');
 
     hamburger.addEventListener('click', () => {
+        console.log('Hamburger menu clicked');
         navLinks.classList.toggle('nav-active');
+        console.log(navLinks.classList);
     });
 
     hamburger.addEventListener('click', () => {
