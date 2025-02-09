@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Code pour la bannière d'images
     const bannerImages = [
-        'assets/images/Head-Green-1.png',
+//        'assets/images/Head-Green-1.png',
         'assets/images/Head-Mauve-1.png',
         'assets/images/Head-Orange-1.png',
         'assets/images/Head-Pink-1.png',
@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
     };
 
-    highResBanner.src = 'assets/images/Head-Mauve-1.png'; // Charger la première image haute résolution
-});
+    highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
+//});
 
     setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
 
