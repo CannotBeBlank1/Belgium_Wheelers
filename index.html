@@ -47,9 +47,12 @@
         });
         
         var languageSelector = document.getElementById('language-selector');
-        languageSelector.addEventListener('change', function() {
-            var selectedLanguage = languageSelector.value;
-            loadLanguageFile(selectedLanguage);
+        if (languageSelector) {
+            languageSelector.addEventListener('change', function() {
+                var selectedLanguage = languageSelector.value;
+                loadLanguageFile(selectedLanguage);
+            });
+        }
         });
         
         function loadLanguageFile(language) {
