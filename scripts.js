@@ -27,10 +27,19 @@ document.addEventListener('DOMContentLoaded', function() {
         'assets/images/Head-Pink-1.png',
         'assets/images/Head-Yellow-1.png'];
     let currentImageIndex = 0;
-    const banner = document.querySelector('.banner');
+
+    //    const banner = document.querySelector('.banner');
+    const lowResBanner = document.getElementById('low-res-banner');
+    const highResBanner = document.getElementById('high-res-banner');
+
+    
+//    function changeBannerImage() {
+//        banner.style.backgroundImage = `url(${bannerImages[currentImageIndex]})`;
+//        currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
+//    }
 
     function changeBannerImage() {
-        banner.style.backgroundImage = `url(${bannerImages[currentImageIndex]})`;
+        highResBanner.src = bannerImages[currentImageIndex];
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
 
