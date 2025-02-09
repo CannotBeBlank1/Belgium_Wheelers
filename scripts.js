@@ -42,6 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
         highResBanner.src = bannerImages[currentImageIndex];
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
+    highResBanner.onload = function() {
+        lowResBanner.style.display = 'none';
+        highResBanner.style.display = 'block';
+        setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
+    };
+
+    highResBanner.src = 'assets/images/Head-Mauve-1.png'; // Charger la première image haute résolution
+//});
 
     setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
 
