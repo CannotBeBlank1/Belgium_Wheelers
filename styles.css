@@ -137,4 +137,9 @@ footer {
     display: block;
     max-width: 100%;
     height: auto;
+
+.banner-high-res {
+    display: none;
+    max-width: 100%;
+    height: auto;  
 }
