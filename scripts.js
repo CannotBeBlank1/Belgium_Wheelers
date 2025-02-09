@@ -51,8 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
     highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
 //});
 
-    setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
-
     // Charger le sélecteur de langue
     var languagePlaceholder = document.getElementById('language-selector-placeholder');
     var xhrLanguage = new XMLHttpRequest();
