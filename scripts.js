@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     highResBanner.onload = function() {
         lowResBanner.style.display = 'none';
         highResBanner.style.display = 'block';
-        setInterval(changeBannerImage, 3000); // Changer l'image toutes les 3 secondes
+        setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
     };
 
     highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
