@@ -24,9 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             highResBanner.src = bannerImages[currentImageIndex];
             highResBanner.onload = () => {
-                requestAnimationFrame(() => {
-                    highResBanner.classList.add('show');
-                });
+                highResBanner.classList.add('show');
             };
             currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
         }, 100); // Attendre que l'opacité change avant de changer l'image
@@ -34,8 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     highResBanner.onload = function() {
         lowResBanner.style.opacity = '0';
-        highResBanner.classList.add('show');
-        setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
+        setTimeout(() => {
+            highResBanner.classList.add('show');
+            setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
+        }, 500); // Attendre un peu pour s'assurer que l'image haute résolution est affichée
     };
 
     highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
