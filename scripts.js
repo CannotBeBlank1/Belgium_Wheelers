@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
     highResBanner.onload = function() {
-        lowResBanner.style.display = '0';
-        highResBanner.style.display = '1';
+        lowResBanner.style.opacity = '0';
+        highResBanner.style.opacity = '1';
         setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
     };
 
