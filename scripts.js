@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 highResBanner.src = nextImage.src;
                 highResBanner.classList.add('show');
-            }, 5000); // Augmenter le délai pour permettre une transition plus douce
+            }, 10000); // Augmenter le délai pour permettre une transition plus douce
         };
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
