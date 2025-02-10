@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const bannerImages = [
+        'assets/images/Head-Green-1.png',
         'assets/images/Head-Mauve-1.png',
         'assets/images/Head-Orange-1.png',
         'assets/images/Head-Pink-1.png',
@@ -20,14 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const highResBanner = document.getElementById('high-res-banner');
 
     function changeBannerImage() {
-        highResBanner.classList.remove('show');
-        setTimeout(() => {
-            highResBanner.src = bannerImages[currentImageIndex];
-            highResBanner.onload = () => {
+        const nextImage = new Image();
+        nextImage.src = bannerImages[currentImageIndex];
+        nextImage.onload = () => {
+            highResBanner.classList.remove('show');
+            setTimeout(() => {
+                highResBanner.src = nextImage.src;
                 highResBanner.classList.add('show');
-            };
-            currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
-        }, 100); // 100ms pour s'assurer que l'image charge avant de changer l'opacité
+            }, 100); // 100ms pour s'assurer que l'image charge avant de changer l'opacité
+        };
+        currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
 
     highResBanner.onload = function() {
@@ -39,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500); // Délai pour démarrer la transition d'opacité
     };
 
-    highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
+    highResBanner.src = bannerImages[currentImageIndex]; // Charger la première image haute résolution
 
     // Charger le sélecteur de langue
     var languagePlaceholder = document.getElementById('language-selector-placeholder');
