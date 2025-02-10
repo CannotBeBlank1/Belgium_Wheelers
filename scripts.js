@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             highResBanner.classList.add('show');
             setInterval(changeBannerImage, 12000); // Changer l'image toutes les 12 secondes
-        }, 1000); // Délai pour démarrer la transition d'opacité
+        }, 3000); // Délai pour démarrer la transition d'opacité
     };
 
     highResBanner.src = bannerImages[currentImageIndex]; // Charger la première image haute résolution
