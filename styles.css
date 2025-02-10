@@ -86,8 +86,9 @@ h1 {
     background-size: cover;
     background-position: center;
     position: relative;
-    transition: background-image 4s ease-in-out; /* Transition pour changer d'image en douceur */
+    transition: opacity 4s ease-in-out; /* Transition pour changer d'image en douceur */
 }
+
 .banner-logo {
     position: absolute;
     top: 50%;
