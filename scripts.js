@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Bienvenue sur le site de Belgium Wheelers ASBL');
 
@@ -8,49 +7,36 @@ document.addEventListener('DOMContentLoaded', function() {
     hamburger.addEventListener('click', () => {
         console.log('Hamburger menu clicked');
         navLinks.classList.toggle('nav-active');
-        console.log(navLinks.classList);
-        console.log('nav-links classes:', navLinks.classList);
-        console.log('nav-links left:', getComputedStyle(navLinks).left);
-
     });
 
-//    hamburger.addEventListener('click', () => {
-//    console.log('Hamburger menu clicked');
-//    navLinks.classList.toggle('nav-active');
-//   });
-
-    // Code pour la bannière d'images
     const bannerImages = [
-//        'assets/images/Head-Green-1.png',
         'assets/images/Head-Mauve-1.png',
         'assets/images/Head-Orange-1.png',
         'assets/images/Head-Pink-1.png',
         'assets/images/Head-Yellow-1.png'
     ];
     let currentImageIndex = 0;
-
-    //    const banner = document.querySelector('.banner');
     const lowResBanner = document.getElementById('low-res-banner');
     const highResBanner = document.getElementById('high-res-banner');
 
-    
-//    function changeBannerImage() {
-//        banner.style.backgroundImage = `url(${bannerImages[currentImageIndex]})`;
-//        currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
-//    }
-
     function changeBannerImage() {
-        highResBanner.src = bannerImages[currentImageIndex];
-        currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
+        highResBanner.classList.remove('show');
+        setTimeout(() => {
+            highResBanner.src = bannerImages[currentImageIndex];
+            highResBanner.onload = () => {
+                highResBanner.classList.add('show');
+            };
+            currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
+        }, 100); // Attendre que l'opacité change avant de changer l'image
     }
+
     highResBanner.onload = function() {
         lowResBanner.style.opacity = '0';
-        highResBanner.style.opacity = '1';
+        highResBanner.classList.add('show');
         setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
     };
 
     highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
-//});
 
     // Charger le sélecteur de langue
     var languagePlaceholder = document.getElementById('language-selector-placeholder');
