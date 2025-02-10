@@ -9,46 +9,54 @@ document.addEventListener('DOMContentLoaded', function() {
         navLinks.classList.toggle('nav-active');
     });
 
-    const bannerImages = [
-        'assets/images/Head-Green-1.png',
-        'assets/images/Head-Mauve-1.png',
-        'assets/images/Head-Orange-1.png',
-        'assets/images/Head-Pink-1.png',
-        'assets/images/Head-Yellow-1.png'
-    ];
-    let currentImageIndex = 0;
-    const lowResBanner = document.getElementById('low-res-banner');
-    const highResBanner = document.getElementById('high-res-banner');
+    // Load the banner.html dynamically and initialize the banner
+    fetch('banner.html').then(response => response.text()).then(data => {
+        document.getElementById('banner-placeholder').innerHTML = data;
+        loadBannerImages();
+    });
 
-    function changeBannerImage() {
-        const nextImage = new Image();
-        nextImage.src = bannerImages[currentImageIndex];
-        nextImage.onload = () => {
-            highResBanner.classList.remove('show');
-            setTimeout(() => {
-                highResBanner.src = nextImage.src;
-                highResBanner.classList.add('show');
-            }, 500); // Délai pour permettre la transition en douceur
-        };
-        currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
+    function loadBannerImages() {
+        const bannerImages = [
+            'assets/images/Head-Green-1.png',
+            'assets/images/Head-Mauve-1.png',
+            'assets/images/Head-Orange-1.png',
+            'assets/images/Head-Pink-1.png',
+            'assets/images/Head-Yellow-1.png'
+        ];
+        const highResContainer = document.getElementById('high-res-container');
+        bannerImages.forEach((src, index) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.id = `high-res-banner-${index}`;
+            img.classList.add('banner');
+            img.style.display = 'none';
+            img.onload = () => checkAllImagesLoaded();
+            highResContainer.appendChild(img);
+        });
     }
 
-    // Assurez-vous que cette fonction n'est appelée qu'une seule fois
-//    function initializeHighResBanner() {
-//        lowResBanner.style.opacity = '0';
-//        highResBanner.style.display = 'block'; // Assurez-vous que l'image haute résolution est visible
-//        setTimeout(() => {
-//            highResBanner.classList.add('show');
-//            setInterval(changeBannerImage, 12000); // Changer l'image toutes les 12 secondes
-//        }, 1000); // Délai pour démarrer la transition d'opacité
-//    }
+    function checkAllImagesLoaded() {
+        const highResImages = document.querySelectorAll('#high-res-container img');
+        const allLoaded = Array.from(highResImages).every(img => img.complete);
+        if (allLoaded) {
+            startImageTransition();
+        }
+    }
 
-    // Définir la fonction onload une seule fois pour éviter plusieurs appels
-    highResBanner.onload = function() {
-        initializeHighResBanner();
-    };
+    function startImageTransition() {
+        const lowResBanner = document.getElementById('low-res-banner');
+        const highResContainer = document.getElementById('high-res-container');
+        const highResImages = document.querySelectorAll('#high-res-container img');
+        let currentImageIndex = 0;
 
-    highResBanner.src = bannerImages[currentImageIndex]; // Charger la première image haute résolution
+        lowResBanner.style.opacity = '0';
+        highResContainer.style.display = 'block';
+        setInterval(() => {
+            highResImages.forEach(img => img.style.display = 'none');
+            highResImages[currentImageIndex].style.display = 'block';
+            currentImageIndex = (currentImageIndex + 1) % highResImages.length;
+        }, 12000); // Changer l'image toutes les 12 secondes
+    }
 
     // Charger le sélecteur de langue
     var languagePlaceholder = document.getElementById('language-selector-placeholder');
