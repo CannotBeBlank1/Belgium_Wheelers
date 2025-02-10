@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             highResImages.forEach(img => img.style.display = 'none');
             highResImages[currentImageIndex].style.display = 'block';
             currentImageIndex = (currentImageIndex + 1) % highResImages.length;
-        }, 12000); // Changer l'image toutes les 12 secondes
+        }, 40000); // Changer l'image toutes les 40 secondes
     }
 
     // Charger le sélecteur de langue
