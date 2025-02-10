@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
         'assets/images/Head-Mauve-1.png',
         'assets/images/Head-Orange-1.png',
         'assets/images/Head-Pink-1.png',
-        'assets/images/Head-Yellow-1.png'];
+        'assets/images/Head-Yellow-1.png'
+    ];
     let currentImageIndex = 0;
 
     //    const banner = document.querySelector('.banner');
@@ -43,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
     highResBanner.onload = function() {
-        lowResBanner.style.display = 'none';
-        highResBanner.style.display = 'block';
+        lowResBanner.style.display = '0';
+        highResBanner.style.display = '1';
         setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
     };
 
