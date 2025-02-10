@@ -24,16 +24,17 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             highResBanner.src = bannerImages[currentImageIndex];
             highResBanner.onload = () => {
-                highResBanner.classList.add('show');
+                requestAnimationFrame(() => {
+                    highResBanner.classList.add('show');
+                });
             };
             currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
-        }, 100); // Attendre que l'opacité change avant de changer l'image
+        }, 4000); // Temps de la transition CSS pour l'opacité
     }
 
     highResBanner.onload = function() {
-        lowResBanner.style.opacity = '0';
         setTimeout(() => {
-            highResBanner.style.display = 'block';
+            lowResBanner.style.opacity = '0';
             highResBanner.classList.add('show');
             setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
         }, 500); // Attendre un peu pour s'assurer que l'image haute résolution est affichée
