@@ -29,15 +29,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             };
             currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
-        }, 4000); // Temps de la transition CSS pour l'opacité
+        }, 100); // Attendre que l'opacité change avant de changer l'image
     }
 
     highResBanner.onload = function() {
-        setTimeout(() => {
-            lowResBanner.style.opacity = '0';
-            highResBanner.classList.add('show');
-            setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
-        }, 500); // Attendre un peu pour s'assurer que l'image haute résolution est affichée
+        lowResBanner.style.opacity = '0';
+        highResBanner.classList.add('show');
+        setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
     };
 
     highResBanner.src = 'assets/images/Head-Green-1.png'; // Charger la première image haute résolution
