@@ -23,7 +23,6 @@ h1 {
     flex-direction: column;
     cursor: pointer;
     z-index: 20; /* Assurez-vous que le menu hamburger est au-dessus des autres éléments */
-
 }
 
 .bar {
@@ -86,7 +85,7 @@ h1 {
     background-size: cover;
     background-position: center;
     position: relative;
- //   transition: opacity 1s ease-in-out; /* Transition pour changer d'image en douceur */
+    transition: opacity 3s ease-in-out; /* Transition pour changer d'image en douceur */
 }
 
 .banner-logo {
@@ -105,7 +104,7 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
-    transition: opacity 2s ease-in-out; /* Transition pour changer d'image en douceur */
+//    transition: opacity 2s ease-in-out; /* Transition pour changer d'image en douceur */
 }
 
 #high-res-banner {
