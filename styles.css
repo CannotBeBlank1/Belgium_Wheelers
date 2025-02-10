@@ -97,22 +97,23 @@ h1 {
 }
 
 #low-res-banner,
-#high-res-banner {
+#high-res-banner,
+#high-res-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     position: absolute;
     top: 0;
     left: 0;
-    transition: opacity 30s ease-in-out; /* Transition pour changer d'image en douceur */
+    transition: opacity 2s ease-in-out; /* Ajustez cette valeur pour la durée de la transition */
 }
 
-#high-res-banner {
-    opacity: 0;
+#high-res-container img {
+    opacity: 0; /* Initialement caché */
 }
 
-#high-res-banner.show {
-    opacity: 1;
+#high-res-container img.show {
+    opacity: 1; /* Affiche l'image haute résolution */
 }
 
 #language-selector {
