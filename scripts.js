@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
-    hamburger.addEventListener('click', () => {
-    console.log('Hamburger menu clicked');
-    navLinks.classList.toggle('nav-active');
-    });
+//    hamburger.addEventListener('click', () => {
+//    console.log('Hamburger menu clicked');
+//    navLinks.classList.toggle('nav-active');
+//   });
 
     // Code pour la bannière d'images
     const bannerImages = [
