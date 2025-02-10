@@ -34,14 +34,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Assurez-vous que cette fonction n'est appelée qu'une seule fois
-    function initializeHighResBanner() {
-        lowResBanner.style.opacity = '0';
-        highResBanner.style.display = 'block'; // Assurez-vous que l'image haute résolution est visible
-        setTimeout(() => {
-            highResBanner.classList.add('show');
-            setInterval(changeBannerImage, 12000); // Changer l'image toutes les 12 secondes
-        }, 1000); // Délai pour démarrer la transition d'opacité
-    }
+//    function initializeHighResBanner() {
+//        lowResBanner.style.opacity = '0';
+//        highResBanner.style.display = 'block'; // Assurez-vous que l'image haute résolution est visible
+//        setTimeout(() => {
+//            highResBanner.classList.add('show');
+//            setInterval(changeBannerImage, 12000); // Changer l'image toutes les 12 secondes
+//        }, 1000); // Délai pour démarrer la transition d'opacité
+//    }
 
     // Définir la fonction onload une seule fois pour éviter plusieurs appels
     highResBanner.onload = function() {
