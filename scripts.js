@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 highResBanner.src = nextImage.src;
                 highResBanner.classList.add('show');
-            }, 100); // 100ms pour s'assurer que l'image charge avant de changer l'opacité
+            }, 500); // Délai pour permettre la transition en douceur
         };
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
