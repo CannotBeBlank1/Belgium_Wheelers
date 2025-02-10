@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 highResBanner.src = nextImage.src;
                 highResBanner.classList.add('show');
-            }, 500); // Délai pour permettre la transition en douceur
+            }, 1000); // Augmenter le délai pour permettre une transition plus douce
         };
         currentImageIndex = (currentImageIndex + 1) % bannerImages.length;
     }
@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', function() {
         highResBanner.style.display = 'block'; // Assurez-vous que l'image haute résolution est visible
         setTimeout(() => {
             highResBanner.classList.add('show');
-            setInterval(changeBannerImage, 9000); // Changer l'image toutes les 9 secondes
-        }, 500); // Délai pour démarrer la transition d'opacité
+            setInterval(changeBannerImage, 12000); // Changer l'image toutes les 12 secondes
+        }, 1000); // Délai pour démarrer la transition d'opacité
     };
 
     highResBanner.src = bannerImages[currentImageIndex]; // Charger la première image haute résolution
