@@ -73,8 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.open('GET', 'locales/' + language + '.json', true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                var translations = JSON.parse(xhr.responseText);
-                applyTranslations(translations);
+                try {
+                    var translations = JSON.parse(xhr.responseText);
+                    applyTranslations(translations);
+                } catch (e) {
+                    console.error("JSON parsing error: ", e);
+                }
             }
         };
         xhr.send();
