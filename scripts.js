@@ -1,10 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Bienvenue sur le site de Belgium Wheelers ASBL');
+    
+    // Charger le header
     fetch('header.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('header-placeholder').innerHTML = data;
-
+            
+            // Ajouter l'écouteur d'événements pour le menu hamburger
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.querySelector('.nav-links');
 
@@ -14,8 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     navLinks.classList.toggle('nav-active');
                 });
             }
+            
+            // Charger le sélecteur de langue
+            var languagePlaceholder = document.getElementById('language-selector-placeholder');
+            var xhrLanguage = new XMLHttpRequest();
+            xhrLanguage.open('GET', 'language-selector.html', true);
+            xhrLanguage.onreadystatechange = function() {
+                if (xhrLanguage.readyState === 4 && xhrLanguage.status === 200) {
+                    languagePlaceholder.innerHTML = xhrLanguage.responseText;
+
+                    var languageSelector = document.getElementById('language-selector');
+                    languageSelector.addEventListener('change', function() {
+                        var selectedLanguage = languageSelector.value;
+                        loadLanguageFile(selectedLanguage);
+                    });
+                }
+            };
+            xhrLanguage.send();
         });
 
+    // Charger le banner.html dynamiquement et initialiser la bannière
     fetch('banner.html').then(response => response.text()).then(data => {
         document.getElementById('banner-placeholder').innerHTML = data;
         loadBannerImages();
@@ -63,22 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentImageIndex = (currentImageIndex + 1) % highResImages.length;
         }, 40000); // Changer l'image toutes les 40 secondes
     }
-
-    var languagePlaceholder = document.getElementById('language-selector-placeholder');
-    var xhrLanguage = new XMLHttpRequest();
-    xhrLanguage.open('GET', 'language-selector.html', true);
-    xhrLanguage.onreadystatechange = function() {
-        if (xhrLanguage.readyState === 4 && xhrLanguage.status === 200) {
-            languagePlaceholder.innerHTML = xhrLanguage.responseText;
-
-            var languageSelector = document.getElementById('language-selector');
-            languageSelector.addEventListener('change', function() {
-                var selectedLanguage = languageSelector.value;
-                loadLanguageFile(selectedLanguage);
-            });
-        }
-    };
-    xhrLanguage.send();
 
     function loadLanguageFile(language) {
         var xhr = new XMLHttpRequest();
