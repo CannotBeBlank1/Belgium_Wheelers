@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.text())
         .then(data => {
             document.getElementById('header-placeholder').innerHTML = data;
-            
-            // Déplacez l'ajout de l'écouteur d'événements ici
+
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.querySelector('.nav-links');
 
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-    // Chargez le banner.html dynamiquement et initialisez la bannière
     fetch('banner.html').then(response => response.text()).then(data => {
         document.getElementById('banner-placeholder').innerHTML = data;
         loadBannerImages();
@@ -66,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 40000); // Changer l'image toutes les 40 secondes
     }
 
-    // Charger le sélecteur de langue
     var languagePlaceholder = document.getElementById('language-selector-placeholder');
     var xhrLanguage = new XMLHttpRequest();
     xhrLanguage.open('GET', 'language-selector.html', true);
