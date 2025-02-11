@@ -105,7 +105,7 @@ h1 {
     position: absolute;
     top: 0;
     left: 0;
-    transition: opacity 10s ease-in-out; /* Ajustez cette valeur pour la durée de la transition */
+    transition: opacity 1s ease-in-out; /* Ajustez cette valeur pour la durée de la transition */
 }
 
 #high-res-container img {
