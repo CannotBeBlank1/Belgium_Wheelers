@@ -1,25 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Bienvenue sur le site de Belgium Wheelers ASBL');
     fetch('header.html')
-    .then(response => response.text())
-    .then(data => {
-    document.getElementById('header-placeholder').innerHTML = data;
-});
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+            
+            // Déplacez l'ajout de l'écouteur d'événements ici
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    console.log('Hamburger menu clicked');
+                    navLinks.classList.toggle('nav-active');
+                });
+            }
+        });
+
+    // Chargez le banner.html dynamiquement et initialisez la bannière
+    fetch('banner.html').then(response => response.text()).then(data => {
+        document.getElementById('banner-placeholder').innerHTML = data;
+        loadBannerImages();
+    });
     
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.querySelector('.nav-links');
-
-hamburger.addEventListener('click', () => {
-    console.log('Hamburger menu clicked');
-    navLinks.classList.toggle('nav-active');
-});
-
-    // Load the banner.html dynamically and initialize the banner
-fetch('banner.html').then(response => response.text()).then(data => {
-    document.getElementById('banner-placeholder').innerHTML = data;
-    loadBannerImages();
-});
-
 function loadBannerImages() {
     const bannerImages = [
         'assets/images/Head-Green-1.png',
