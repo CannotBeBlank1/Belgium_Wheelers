@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         highResContainer.style.display = 'block';
         setInterval(() => {
             highResImages.forEach(img => img.style.display = 'none');
-            highResImages[currentImageIndex].style.display = 'block';
+            highResImages[currentImageIndex].classList.add('show');
             currentImageIndex = (currentImageIndex + 1) % highResImages.length;
         }, 40000); // Changer l'image toutes les 40 secondes
     }
