@@ -70,17 +70,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-  function startImageTransition() {
+function startImageTransition() {
     const lowResBanner = document.getElementById('low-res-banner');
     const highResContainer = document.getElementById('high-res-container');
     const highResImages = document.querySelectorAll('#high-res-container img');
     let currentImageIndex = 0;
 
-    lowResBanner.style.opacity = '0.3';
+    // Masquer l'image basse résolution une fois que les images haute résolution sont prêtes
+    lowResBanner.style.opacity = '0';
     highResContainer.style.display = 'block';
+
+    // Supprimer l'image basse résolution du DOM après un court délai
+    setTimeout(() => {
+        lowResBanner.parentNode.removeChild(lowResBanner);
+    }, 1000); // Délai de 1 seconde pour une transition en douceur
+
+    // Démarrer la transition des images haute résolution
     highResImages[currentImageIndex].classList.add('show');
     setInterval(() => {
-        highResContainer.style.opacity = '0.5';
         highResImages[currentImageIndex].classList.remove('show');
         currentImageIndex = (currentImageIndex + 1) % highResImages.length;
         highResImages[currentImageIndex].classList.add('show');
