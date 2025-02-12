@@ -61,6 +61,10 @@ h1 {
     font-size: 1.5rem;
 }
 
+.nav-links {
+    z-index: 10; /* Assurez-vous qu'il ne cache pas la bannière */
+}
+
 @media (min-width: 768px) {
     .nav-links {
         flex-direction: row;
@@ -86,6 +90,7 @@ h1 {
     background-position: center;
     position: relative;
     transition: opacity 3s ease-in-out;*/ /* Transition pour changer d'image en douceur */
+    z-index: 1;
 }
 
 .banner-logo {
@@ -94,6 +99,7 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     max-width: 200px; /* Ajustez cette valeur en fonction de la taille désirée du logo */
+    z-index: 10;
 }
 
 #low-res-banner,
