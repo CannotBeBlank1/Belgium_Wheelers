@@ -121,6 +121,10 @@ h1 {
     opacity: 1; /* Affiche l'image haute résolution */
 }
 
+.hidden {
+    display: none;
+}
+
 #language-selector {
     display: inline-block;
     width: auto;
