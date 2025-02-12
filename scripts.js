@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const highResImages = document.querySelectorAll('#high-res-container img');
         let currentImageIndex = 0;
 
-        lowResBanner.style.opacity = '0';
+        lowResBanner.style.opacity = '10';
         highResContainer.style.display = 'block';
         setInterval(() => {
             highResImages.forEach(img => img.style.display = 'none');
