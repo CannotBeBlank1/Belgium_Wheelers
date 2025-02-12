@@ -76,10 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const highResImages = document.querySelectorAll('#high-res-container img');
     let currentImageIndex = 0;
 
-    lowResBanner.style.opacity = '0.5';
+    lowResBanner.style.opacity = '0.3';
     highResContainer.style.display = 'block';
     highResImages[currentImageIndex].classList.add('show');
     setInterval(() => {
+        lowResBanner.style.opacity = '0.3';
         highResImages[currentImageIndex].classList.remove('show');
         currentImageIndex = (currentImageIndex + 1) % highResImages.length;
         highResImages[currentImageIndex].classList.add('show');
