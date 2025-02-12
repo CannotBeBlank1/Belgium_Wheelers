@@ -70,20 +70,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function startImageTransition() {
-        const lowResBanner = document.getElementById('low-res-banner');
-        const highResContainer = document.getElementById('high-res-container');
-        const highResImages = document.querySelectorAll('#high-res-container img');
-        let currentImageIndex = 0;
+  function startImageTransition() {
+    const lowResBanner = document.getElementById('low-res-banner');
+    const highResContainer = document.getElementById('high-res-container');
+    const highResImages = document.querySelectorAll('#high-res-container img');
+    let currentImageIndex = 0;
 
-        lowResBanner.style.opacity = '0.5';
-        highResContainer.style.display = 'block';
-        setInterval(() => {
-            highResImages.forEach(img => img.style.display = 'none');
-            highResImages[currentImageIndex].classList.add('show');
-            currentImageIndex = (currentImageIndex + 1) % highResImages.length;
-        }, 40000); // Changer l'image toutes les 40 secondes
-    }
+    lowResBanner.style.opacity = '0.5';
+    highResContainer.style.display = 'block';
+    highResImages[currentImageIndex].classList.add('show');
+    setInterval(() => {
+        highResImages[currentImageIndex].classList.remove('show');
+        currentImageIndex = (currentImageIndex + 1) % highResImages.length;
+        highResImages[currentImageIndex].classList.add('show');
+    }, 40000); // Changer l'image toutes les 40 secondes
+}
 
     function loadLanguageFile(language) {
         var xhr = new XMLHttpRequest();
