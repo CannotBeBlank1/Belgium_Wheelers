@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     highResContainer.style.display = 'block';
     highResImages[currentImageIndex].classList.add('show');
     setInterval(() => {
-        lowResBanner.style.opacity = '0.3';
+        highResContainer.style.opacity = '0.5';
         highResImages[currentImageIndex].classList.remove('show');
         currentImageIndex = (currentImageIndex + 1) % highResImages.length;
         highResImages[currentImageIndex].classList.add('show');
