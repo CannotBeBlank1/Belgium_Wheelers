@@ -76,7 +76,6 @@ function startImageTransition() {
     const highResImages = document.querySelectorAll('#high-res-container img');
     let currentImageIndex = 0;
 
-    // Masquer l'image basse résolution une fois que les images haute résolution sont prêtes
     lowResBanner.style.opacity = '0';
     highResContainer.style.display = 'block';
 
@@ -85,13 +84,12 @@ function startImageTransition() {
         lowResBanner.parentNode.removeChild(lowResBanner);
     }, 1000); // Délai de 1 seconde pour une transition en douceur
 
-    // Démarrer la transition des images haute résolution
     highResImages[currentImageIndex].classList.add('show');
     setInterval(() => {
         highResImages[currentImageIndex].classList.remove('show');
         currentImageIndex = (currentImageIndex + 1) % highResImages.length;
         highResImages[currentImageIndex].classList.add('show');
-    }, 40000); // Changer l'image toutes les 40 secondes
+    }, 20000); // Changer l'image toutes les 40 secondes
 }
 
     function loadLanguageFile(language) {
