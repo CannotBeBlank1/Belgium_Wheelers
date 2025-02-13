@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Casse-Briques Final Corrigé</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+
+        .paddle {
+            position: absolute;
+            background-color: #007BFF;
+            border-radius: 10px;
+        }
+
+        .horizontal-paddle {
+            width: 120px;
+            height: 20px;
+        }
+
+        .vertical-paddle {
+            width: 20px;
+            height: 120px;
+        }
+
+        .ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #FF5733;
+            border-radius: 50%;
+        }
+
+        .power-ball {
+            width: 25px;
+            height: 25px;
+            background-color: #FFD700;
+            animation: power-animation 0.5s infinite;
+        }
+
+        @keyframes power-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .brick {
+            position: absolute;
+            width: 60px;
+            height: 20px;
+            background-color: #FF6347;
+            border: 1px solid #333;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            background-image: linear-gradient(135deg, #b0301a 25%, #ff6f61 25%, #ff6f61 50%, #b0301a 50%, #b0301a 75%, #ff6f61 75%);
+            background-size: 10px 10px;
+            transform: perspective(100px) rotateX(20deg);
+        }
+
+        .bonus {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #FFD700;
+            border-radius: 50%;
+            display: none;
+        }
+
+        .projectile {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #00FF00;
+            border-radius: 50%;
+        }
+
+        .lives {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .start-message, .game-over-message, .victory-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #333;
+            display: none;
+            text-align: center;
+        }
+
+        .developer-info {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1em;
+            color: #333;
+            display: none;
+        }
+
+        @keyframes victory-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .victory-message {
+            color: #FF6347;
+            animation: victory-animation 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="paddle horizontal-paddle" id="top-paddle"></div>
+        <div class="paddle horizontal-paddle" id="bottom-paddle"></div>
+        <div class="paddle vertical-paddle" id="left-paddle"></div>
+        <div class="paddle vertical-paddle" id="right-paddle"></div>
+        <div class="ball" id="ball"></div>
+        <div class="bonus" id="bonus"></div>
+        <div class="lives" id="lives">Vies: 3</div>
+        <div class="start-message" id="start-message">Appuyez sur une touche pour commencer<br><span class="developer-info">Développé & publié en moins d'1h par Mistral & Bruno.</span></div>
+        <div class="game-over-message" id="game-over-message">Game Over! Appuyez sur une touche pour rejouer</div>
+        <div class="victory-message" id="victory-message">Félicitations ! Appuyez sur une touche pour rejouer</div>
+        <!-- Bricks will be added dynamically -->
+    </div>
+    <script>
+        const gameContainer = document.querySelector('.game-container');
+        const ball = document.getElementById('ball');
+        const topPaddle = document.getElementById('top-paddle');
+        const bottomPaddle = document.getElementById('bottom-paddle');
+        const leftPaddle = document.getElementById('left-paddle');
+        const rightPaddle = document.getElementById('right-paddle');
+        const bonus = document.getElementById('bonus');
+        const livesDisplay = document.getElementById('lives');
+        const startMessage = document.getElementById('start-message');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const victoryMessage = document.getElementById('victory-message');
+
+        let ballPosition = { x: 400, y: 300 };
+        let ballSpeed = { x: 2, y: 2 };
+        let paddlePositions = {
+            top: 340,
+            bottom: 340,
+            left: 240,
+            right: 240
+        };
+        let lives = 3;
+        let bonusActive = false;
+        let powerBallActive = false;
+        let bonusTimeout;
+        let powerBallTimeout;
+        const bricks = [];
+        let gameStarted = false;
+
+        function createBricks() {
+            const rows = 4;
+            const cols = 6;
+            const brickWidth = 80;
+            const brickHeight = 20;
+            const padding = 10;
+            const offsetTop = 50;
+            const offsetLeft = 30;
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const brick = document.createElement('div');
+                    brick.classList.add('brick');
+                    brick.style.top = `${offsetTop + r * (brickHeight + padding)}px`;
+                    brick.style.left = `${offsetLeft + c * (brickWidth + padding)}px`;
+                    gameContainer.appendChild(brick);
+                    bricks.push(brick);
+                }
+            }
+
+            // Add bonus to random bricks
+            const bonusBricks = bricks.filter(() => Math.random() < 0.2);
+            bonusBricks.forEach(brick => brick.classList.add('bonus-brick'));
+
+            // Add power ball bonus to random bricks
+            const powerBricks = bricks.filter(() => Math.random() < 0.1);
+            powerBricks.forEach(brick => brick.classList.add('power-brick'));
+        }
+
+        function moveBall() {
+            if (!gameStarted) return;
+
+            ballPosition.x += ballSpeed.x;
+            ballPosition.y += ballSpeed.y;
+
+            // Check for collision with walls
+            if (ballPosition.x <= 0 || ballPosition.x + 20 >= gameContainer.clientWidth ||
+                ballPosition.y <= 0 || ballPosition.y + 20 >= gameContainer.clientHeight) {
+                lives--;
+                livesDisplay.textContent = `Vies: ${lives}`;
+                if (lives <= 0) {
+                    gameOver();
+                } else {
+                    resetBall();
+                }
+                return;
+            }
+
+            ball.style.left = `${ballPosition.x}px`;
+            ball.style.top = `${ballPosition.y}px`;
+
+            detectCollision();
+        }
+
+        function detectCollision() {
+            // Collision with paddles
+            if (ballPosition.y <= 30 && ballPosition.x >= paddlePositions.top && ballPosition.x <= paddlePositions.top + 120) {
+                ballSpeed.y = -ballSpeed.y;
+                ballPosition.y = 30; // Prevent ball from entering paddle
+            }
+
+            if (ballPosition.y >= gameContainer.clientHeight - 50 && ballPosition.x >= paddlePositions.bottom && ballPosition.x <= paddlePositions.bottom + 120) {
+                ballSpeed.y = -ballSpeed.y;
+                ballPosition.y = gameContainer.clientHeight - 50; // Prevent ball from entering paddle
+            }
+
+            if (ballPosition.x <= 30 && ballPosition.y >= paddlePositions.left && ballPosition.y <= paddlePositions.left + 120) {
+                ballSpeed.x = -ballSpeed.x;
+                ballPosition.x = 30; // Prevent ball from entering paddle
+            }
+
+            if (ballPosition.x >= gameContainer.clientWidth - 50 && ballPosition.y >= paddlePositions.right && ballPosition.y <= paddlePositions.right + 120) {
+                ballSpeed.x = -ballSpeed.x;
+                ballPosition.x = gameContainer.clientWidth - 50; // Prevent ball from entering paddle
+            }
+
+            // Collision with bricks
+            bricks.forEach((brick, index) => {
+                const brickRect = brick.getBoundingClientRect();
+                if (ballPosition.x + 20 >= brickRect.left && ballPosition.x <= brickRect.right &&
+                    ballPosition.y + 20 >= brickRect.top && ballPosition.y <= brickRect.bottom) {
+                    ballSpeed.y = -ballSpeed.y;
+                    gameContainer.removeChild(brick);
+                    bricks.splice(index, 1);
+
+                    if (brick.classList.contains('bonus-brick')) {
+                        dropBonus(brickRect);
+                    }
+
+                    if (brick.classList.contains('power-brick')) {
+                        activatePowerBall();
+                    }
+
+                    if (bricks.length === 0) {
+                        victory();
+                    }
+                }
+            });
+        }
+
+        function dropBonus(brickRect) {
+            const directions = ['up', 'right', 'left'];
+            const direction = directions[Math.floor(Math.random() * directions.length)];
+            bonus.style.display = 'block';
+            bonus.style.top = `${brickRect.top}px`;
+            bonus.style.left = `${brickRect.left}px`;
+
+            let bonusPosition = { x: brickRect.left, y: brickRect.top };
+            const bonusSpeed = 3;
+
+            function moveBonus() {
+                if (direction === 'up') {
+                    bonusPosition.y -= bonusSpeed;
+                } else if (direction === 'right') {
+                    bonusPosition.x += bonusSpeed;
+                } else if (direction === 'left') {
+                    bonusPosition.x -= bonusSpeed;
+                }
+
+                bonus.style.top = `${bonusPosition.y}px`;
+                bonus.style.left = `${bonusPosition.x}px`;
+
+                // Check for collision with paddles
+                if ((bonusPosition.y >= gameContainer.clientHeight - 50 && bonusPosition.x >= paddlePositions.bottom && bonusPosition.x <= paddlePositions.bottom + 120) ||
+                    (bonusPosition.y <= 30 && bonusPosition.x >= paddlePositions.top && bonusPosition.x <= paddlePositions.top + 120) ||
+                    (bonusPosition.x <= 30 && bonusPosition.y >= paddlePositions.left && bonusPosition.y <= paddlePositions.left + 120) ||
+                    (bonusPosition.x >= gameContainer.clientWidth - 50 && bonusPosition.y >= paddlePositions.right && bonusPosition.y <= paddlePositions.right + 120)) {
+                    activateBonus();
+                    bonus.style.display = 'none';
+                } else if (bonusPosition.y < 0 || bonusPosition.x < 0 || bonusPosition.x > gameContainer.clientWidth || bonusPosition.y > gameContainer.clientHeight) {
+                    bonus.style.display = 'none';
+                } else {
+                    requestAnimationFrame(moveBonus);
+                }
+            }
+
+            requestAnimationFrame(moveBonus);
+        }
+
+        function activateBonus() {
+            bonusActive = true;
+
+            function shootProjectiles(event) {
+                if (!bonusActive) return;
+
+                const projectile = document.createElement('div');
+                projectile.classList.add('projectile');
+                projectile.style.top = `${event.clientY - gameContainer.offsetTop}px`;
+                projectile.style.left = `${event.clientX - gameContainer.offsetLeft}px`;
+                gameContainer.appendChild(projectile);
+
+                let projectilePosition = { x: event.clientX - gameContainer.offsetLeft, y: event.clientY - gameContainer.offsetTop };
+                const projectileSpeed = 5;
+
+                function moveProjectile() {
+                    projectilePosition.y -= projectileSpeed;
+                    projectile.style.top = `${projectilePosition.y}px`;
+
+                    // Check for collision with bricks
+                    bricks.forEach((brick, index) => {
+                        const brickRect = brick.getBoundingClientRect();
+                        if (projectilePosition.x + 10 >= brickRect.left && projectilePosition.x <= brickRect.right &&
+                            projectilePosition.y + 10 >= brickRect.top && projectilePosition.y <= brickRect.bottom) {
+                            gameContainer.removeChild(brick);
+                            bricks.splice(index, 1);
+                            gameContainer.removeChild(projectile);
+                            if (bricks.length === 0) {
+                                victory();
+                            }
+                        }
+                    });
+
+                    if (projectilePosition.y < 0 || projectilePosition.y > gameContainer.clientHeight) {
+                        gameContainer.removeChild(projectile);
+                    } else {
+                        requestAnimationFrame(moveProjectile);
+                    }
+                }
+
+                requestAnimationFrame(moveProjectile);
+            }
+
+            gameContainer.addEventListener('click', shootProjectiles);
+
+            clearTimeout(bonusTimeout);
+            bonusTimeout = setTimeout(() => {
+                bonusActive = false;
+                gameContainer.removeEventListener('click', shootProjectiles);
+            }, 10000);
+        }
+
+        function activatePowerBall() {
+            powerBallActive = true;
+            ball.classList.add('power-ball');
+
+            clearTimeout(powerBallTimeout);
+            powerBallTimeout = setTimeout(() => {
+                powerBallActive = false;
+                ball.classList.remove('power-ball');
+            }, 10000);
+        }
+
+        function resetBall() {
+            ballPosition = { x: 400, y: 300 };
+            ballSpeed = { x: 2, y: 2 }; // Reset speed
+            ball.classList.remove('power-ball');
+            powerBallActive = false;
+        }
+
+        function movePaddles(event) {
+            const rect = gameContainer.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+
+            paddlePositions.top = Math.max(Math.min(mouseX - 60, gameContainer.clientWidth - 120), 0);
+            paddlePositions.bottom = Math.max(Math.min(mouseX - 60, gameContainer.clientWidth - 120), 0);
+            paddlePositions.left = Math.max(Math.min(mouseY - 60, gameContainer.clientHeight - 120), 0);
+            paddlePositions.right = Math.max(Math.min(mouseY - 60, gameContainer.clientHeight - 120), 0);
+
+            topPaddle.style.left = `${paddlePositions.top}px`;
+            bottomPaddle.style.left = `${paddlePositions.bottom}px`;
+            leftPaddle.style.top = `${paddlePositions.left}px`;
+            rightPaddle.style.top = `${paddlePositions.right}px`;
+
+            topPaddle.style.top = '10px';
+            bottomPaddle.style.top = `${gameContainer.clientHeight - 30}px`;
+            leftPaddle.style.left = '10px';
+            rightPaddle.style.left = `${gameContainer.clientWidth - 30}px`;
+        }
+
+        function gameLoop() {
+            moveBall();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            gameStarted = true;
+            startMessage.style.display = 'none';
+            gameOverMessage.style.display = 'none';
+            victoryMessage.style.display = 'none';
+            resetGame();
+            gameLoop();
+        }
+
+        function resetGame() {
+            ballPosition = { x: 400, y: 300 };
+            ballSpeed = { x: 2, y: 2 };
+            lives = 3;
+            livesDisplay.textContent = `Vies: ${lives}`;
+            bonusActive = false;
+            powerBallActive = false;
+            bricks.length = 0;
+            gameContainer.innerHTML = '';
+            gameContainer.appendChild(topPaddle);
+            gameContainer.appendChild(bottomPaddle);
+            gameContainer.appendChild(leftPaddle);
+            gameContainer.appendChild(rightPaddle);
+            gameContainer.appendChild(ball);
+            gameContainer.appendChild(bonus);
+            gameContainer.appendChild(livesDisplay);
+            createBricks();
+        }
+
+        function gameOver() {
+            gameStarted = false;
+            gameOverMessage.style.display = 'block';
+        }
+
+        function victory() {
+            gameStarted = false;
+            victoryMessage.style.display = 'block';
+        }
+
+        gameContainer.addEventListener('mousemove', movePaddles);
+        document.addEventListener('keydown', () => {
+            if (!gameStarted) {
+                startGame();
+            }
+        });
+
+        gameContainer.addEventListener('click', () => {
+            if (!gameStarted) {
+                startGame();
+            }
+        });
+
+        createBricks();
+        startMessage.style.display = 'block';
+    </script>
+</body>
+</html>
