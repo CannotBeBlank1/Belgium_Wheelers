@@ -1,1 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculatrice Classique</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
 
+        .calculator {
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #333;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        .calculator-screen {
+            width: 100%;
+            height: 60px;
+            border: none;
+            background-color: #444;
+            color: white;
+            text-align: right;
+            padding: 20px;
+            font-size: 2em;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .calculator-keys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 60px;
+            font-size: 1.5em;
+            border: none;
+            background-color: #555;
+            color: white;
+            cursor: pointer;
+            outline: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+
+        button.operator {
+            background-color: #007BFF;
+        }
+
+        button.operator:hover {
+            background-color: #0056b3;
+        }
+
+        button.all-clear {
+            background-color: #FF5733;
+            grid-column: span 4;
+        }
+
+        button.all-clear:hover {
+            background-color: #c44022;
+        }
+
+        button.equal-sign {
+            background-color: #28a745;
+            grid-column: span 4;
+        }
+
+        button.equal-sign:hover {
+            background-color: #218838;
+        }
+
+        button.zero {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="calculator-screen" value="" disabled />
+        <div class="calculator-keys">
+            <button type="button" class="all-clear" value="all-clear">AC</button>
+
+            <button type="button" value="7">7</button>
+            <button type="button" value="8">8</button>
+            <button type="button" value="9">9</button>
+            <button type="button" class="operator" value="/">&divide;</button>
+
+            <button type="button" value="4">4</button>
+            <button type="button" value="5">5</button>
+            <button type="button" value="6">6</button>
+            <button type="button" class="operator" value="*">&times;</button>
+
+            <button type="button" value="1">1</button>
+            <button type="button" value="2">2</button>
+            <button type="button" value="3">3</button>
+            <button type="button" class="operator" value="-">-</button>
+
+            <button type="button" value="0" class="zero">0</button>
+            <button type="button" class="decimal" value=".">.</button>
+            <button type="button" class="operator" value="+">+</button>
+
+            <button type="button" class="equal-sign operator" value="=">=</button>
+        </div>
+    </div>
+    <script>
+        class Calculator {
+            constructor(screen) {
+                this.screen = screen;
+                this.reset();
+            }
+
+            reset() {
+                this.currentValue = '0';
+                this.operator = null;
+                this.previousValue = null;
+                this.updateScreen();
+            }
+
+            handleNumber(number) {
+                if (this.currentValue === '0') {
+                    this.currentValue = number;
+                } else {
+                    this.currentValue += number;
+                }
+                this.updateScreen();
+            }
+
+            handleOperator(nextOperator) {
+                const inputValue = parseFloat(this.currentValue);
+
+                if (this.operator && this.previousValue !== null) {
+                    this.currentValue = this.calculate(this.previousValue, inputValue, this.operator).toString();
+                    this.updateScreen();
+                }
+
+                this.operator = nextOperator;
+                this.previousValue = inputValue;
+                this.currentValue = '0';
+            }
+
+            calculate(prev, current, operator) {
+                switch (operator) {
+                    case '+':
+                        return prev + current;
+                    case '-':
+                        return prev - current;
+                    case '*':
+                        return prev * current;
+                    case '/':
+                        return prev / current;
+                    default:
+                        return current;
+                }
+            }
+
+            handleEqual() {
+                const inputValue = parseFloat(this.currentValue);
+                if (this.operator && this.previousValue !== null) {
+                    this.currentValue = this.calculate(this.previousValue, inputValue, this.operator).toString();
+                    this.updateScreen();
+                }
+                this.operator = null;
+                this.previousValue = null;
+            }
+
+            handleClear() {
+                this.reset();
+            }
+
+            updateScreen() {
+                this.screen.value = this.currentValue;
+            }
+        }
+
+        const screen = document.querySelector('.calculator-screen');
+        const calculator = new Calculator(screen);
+
+        document.querySelector('.calculator-keys').addEventListener('click', (event) => {
+            const { target } = event;
+            if (!target.matches('button')) return;
+
+            if (target.classList.contains('operator')) {
+                calculator.handleOperator(target.value);
+                return;
+            }
+
+            if (target.classList.contains('decimal')) {
+                calculator.handleNumber('.');
+                return;
+            }
+
+            if (target.classList.contains('all-clear')) {
+                calculator.handleClear();
+                return;
+            }
+
+            if (target.classList.contains('equal-sign')) {
+                calculator.handleEqual();
+                return;
+            }
+
+            calculator.handleNumber(target.value);
+        });
+    </script>
+</body>
+</html>
