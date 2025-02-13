@@ -23,6 +23,8 @@
             height: 600px;
             border: 2px solid #333;
             background-color: #fff;
+            max-width: 100%;
+            max-height: 100%;
         }
 
         .paddle {
@@ -64,14 +66,14 @@
 
         .brick {
             position: absolute;
-            width: 60px;
+            width: 40px;
             height: 20px;
             background-color: #FF6347;
             border: 1px solid #333;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
             background-image: linear-gradient(135deg, #b0301a 25%, #ff6f61 25%, #ff6f61 50%, #b0301a 50%, #b0301a 75%, #ff6f61 75%);
             background-size: 10px 10px;
-            transform: perspective(100px) rotateX(20deg);
+            transform: perspective(100px) rotateX(10deg);
         }
 
         .bonus {
@@ -85,21 +87,22 @@
 
         .projectile {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #00FF00;
+            width: 15px;
+            height: 15px;
+            background-color: #000;
             border-radius: 50%;
+            transform: rotate(45deg);
         }
 
         .lives {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            top: 10px;
+            left: 10px;
             font-size: 1.5em;
             color: #333;
         }
 
-        .start-message, .game-over-message, .victory-message {
+        .start-message, .game-over-message, .victory-message, .message {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -141,7 +144,7 @@
         <div class="ball" id="ball"></div>
         <div class="bonus" id="bonus"></div>
         <div class="lives" id="lives">Vies: 3</div>
-        <div class="start-message" id="start-message">Appuyez sur une touche pour commencer<br><span class="developer-info">Développé & publié en moins d'1h par Mistral & Bruno.</span></div>
+        <div class="start-message" id="start-message">Appuyez sur une touche pour commencer<br><span class="developer-info">Jeu créé par Mistral avec Bruno.</span></div>
         <div class="game-over-message" id="game-over-message">Game Over! Appuyez sur une touche pour rejouer</div>
         <div class="victory-message" id="victory-message">Félicitations ! Appuyez sur une touche pour rejouer</div>
         <!-- Bricks will be added dynamically -->
@@ -159,8 +162,8 @@
         const gameOverMessage = document.getElementById('game-over-message');
         const victoryMessage = document.getElementById('victory-message');
 
-        let ballPosition = { x: 400, y: 300 };
-        let ballSpeed = { x: 2, y: 2 };
+        let ballPosition = { x: 400, y: 560 };
+        let ballSpeed = { x: 2, y: -2 };
         let paddlePositions = {
             top: 340,
             bottom: 340,
@@ -174,15 +177,16 @@
         let powerBallTimeout;
         const bricks = [];
         let gameStarted = false;
+        let gamePaused = false;
 
         function createBricks() {
-            const rows = 4;
-            const cols = 6;
-            const brickWidth = 80;
+            const rows = 7;
+            const cols = 10;
+            const brickWidth = 40;
             const brickHeight = 20;
-            const padding = 10;
-            const offsetTop = 50;
-            const offsetLeft = 30;
+            const padding = 5;
+            const offsetTop = 60;
+            const offsetLeft = 60;
 
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
@@ -205,7 +209,7 @@
         }
 
         function moveBall() {
-            if (!gameStarted) return;
+            if (!gameStarted || gamePaused) return;
 
             ballPosition.x += ballSpeed.x;
             ballPosition.y += ballSpeed.y;
@@ -218,6 +222,8 @@
                 if (lives <= 0) {
                     gameOver();
                 } else {
+                    gamePaused = true;
+                    showMessage("Une vie en moins! Appuyez sur une touche pour continuer.");
                     resetBall();
                 }
                 return;
@@ -234,21 +240,25 @@
             if (ballPosition.y <= 30 && ballPosition.x >= paddlePositions.top && ballPosition.x <= paddlePositions.top + 120) {
                 ballSpeed.y = -ballSpeed.y;
                 ballPosition.y = 30; // Prevent ball from entering paddle
+                ballSpeed.x += (ballPosition.x - (paddlePositions.top + 60)) * 0.2; // Adjust angle
             }
 
             if (ballPosition.y >= gameContainer.clientHeight - 50 && ballPosition.x >= paddlePositions.bottom && ballPosition.x <= paddlePositions.bottom + 120) {
                 ballSpeed.y = -ballSpeed.y;
                 ballPosition.y = gameContainer.clientHeight - 50; // Prevent ball from entering paddle
+                ballSpeed.x += (ballPosition.x - (paddlePositions.bottom + 60)) * 0.1; // Adjust angle
             }
 
             if (ballPosition.x <= 30 && ballPosition.y >= paddlePositions.left && ballPosition.y <= paddlePositions.left + 120) {
                 ballSpeed.x = -ballSpeed.x;
                 ballPosition.x = 30; // Prevent ball from entering paddle
+                ballSpeed.y += (ballPosition.y - (paddlePositions.left + 60)) * 0.2; // Adjust angle
             }
 
             if (ballPosition.x >= gameContainer.clientWidth - 50 && ballPosition.y >= paddlePositions.right && ballPosition.y <= paddlePositions.right + 120) {
                 ballSpeed.x = -ballSpeed.x;
                 ballPosition.x = gameContainer.clientWidth - 50; // Prevent ball from entering paddle
+                ballSpeed.y += (ballPosition.y - (paddlePositions.right + 60)) * 0.1; // Adjust angle
             }
 
             // Collision with bricks
@@ -256,7 +266,9 @@
                 const brickRect = brick.getBoundingClientRect();
                 if (ballPosition.x + 20 >= brickRect.left && ballPosition.x <= brickRect.right &&
                     ballPosition.y + 20 >= brickRect.top && ballPosition.y <= brickRect.bottom) {
-                    ballSpeed.y = -ballSpeed.y;
+                    if (!powerBallActive) {
+                        ballSpeed.y = -ballSpeed.y;
+                    }
                     gameContainer.removeChild(brick);
                     bricks.splice(index, 1);
 
@@ -336,8 +348,8 @@
                     // Check for collision with bricks
                     bricks.forEach((brick, index) => {
                         const brickRect = brick.getBoundingClientRect();
-                        if (projectilePosition.x + 10 >= brickRect.left && projectilePosition.x <= brickRect.right &&
-                            projectilePosition.y + 10 >= brickRect.top && projectilePosition.y <= brickRect.bottom) {
+                        if (projectilePosition.x + 15 >= brickRect.left && projectilePosition.x <= brickRect.right &&
+                            projectilePosition.y + 15 >= brickRect.top && projectilePosition.y <= brickRect.bottom) {
                             gameContainer.removeChild(brick);
                             bricks.splice(index, 1);
                             gameContainer.removeChild(projectile);
@@ -378,10 +390,12 @@
         }
 
         function resetBall() {
-            ballPosition = { x: 400, y: 300 };
-            ballSpeed = { x: 2, y: 2 }; // Reset speed
+            ballPosition = { x: 400, y: 560 };
+            ballSpeed = { x: 2, y: -2 }; // Reset speed
             ball.classList.remove('power-ball');
             powerBallActive = false;
+            ball.style.left = `${ballPosition.x}px`;
+            ball.style.top = `${ballPosition.y}px`;
         }
 
         function movePaddles(event) {
@@ -389,20 +403,20 @@
             const mouseX = event.clientX - rect.left;
             const mouseY = event.clientY - rect.top;
 
-            paddlePositions.top = Math.max(Math.min(mouseX - 60, gameContainer.clientWidth - 120), 0);
-            paddlePositions.bottom = Math.max(Math.min(mouseX - 60, gameContainer.clientWidth - 120), 0);
-            paddlePositions.left = Math.max(Math.min(mouseY - 60, gameContainer.clientHeight - 120), 0);
-            paddlePositions.right = Math.max(Math.min(mouseY - 60, gameContainer.clientHeight - 120), 0);
+            paddlePositions.top = Math.max(Math.min(mouseX - 60, gameContainer.clientWidth - 140), 20);
+            paddlePositions.bottom = Math.max(Math.min(mouseX - 60, gameContainer.clientWidth - 140), 20);
+            paddlePositions.left = Math.max(Math.min(mouseY - 60, gameContainer.clientHeight - 140), 20);
+            paddlePositions.right = Math.max(Math.min(mouseY - 60, gameContainer.clientHeight - 140), 20);
 
             topPaddle.style.left = `${paddlePositions.top}px`;
             bottomPaddle.style.left = `${paddlePositions.bottom}px`;
             leftPaddle.style.top = `${paddlePositions.left}px`;
             rightPaddle.style.top = `${paddlePositions.right}px`;
 
-            topPaddle.style.top = '10px';
-            bottomPaddle.style.top = `${gameContainer.clientHeight - 30}px`;
-            leftPaddle.style.left = '10px';
-            rightPaddle.style.left = `${gameContainer.clientWidth - 30}px`;
+            topPaddle.style.top = '20px';
+            bottomPaddle.style.top = `${gameContainer.clientHeight - 40}px`;
+            leftPaddle.style.left = '20px';
+            rightPaddle.style.left = `${gameContainer.clientWidth - 40}px`;
         }
 
         function gameLoop() {
@@ -412,6 +426,7 @@
 
         function startGame() {
             gameStarted = true;
+            gamePaused = false;
             startMessage.style.display = 'none';
             gameOverMessage.style.display = 'none';
             victoryMessage.style.display = 'none';
@@ -420,8 +435,8 @@
         }
 
         function resetGame() {
-            ballPosition = { x: 400, y: 300 };
-            ballSpeed = { x: 2, y: 2 };
+            ballPosition = { x: 400, y: 560 };
+            ballSpeed = { x: 2, y: -2 };
             lives = 3;
             livesDisplay.textContent = `Vies: ${lives}`;
             bonusActive = false;
@@ -448,16 +463,34 @@
             victoryMessage.style.display = 'block';
         }
 
+        function showMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.textContent = message;
+            gameContainer.appendChild(messageElement);
+
+            setTimeout(() => {
+                gameContainer.removeChild(messageElement);
+                gamePaused = false;
+            }, 2000);
+        }
+
         gameContainer.addEventListener('mousemove', movePaddles);
         document.addEventListener('keydown', () => {
             if (!gameStarted) {
                 startGame();
+            } else if (gamePaused) {
+                gamePaused = false;
+                gameContainer.querySelector('.message').style.display = 'none';
             }
         });
 
         gameContainer.addEventListener('click', () => {
             if (!gameStarted) {
                 startGame();
+            } else if (gamePaused) {
+                gamePaused = false;
+                gameContainer.querySelector('.message').style.display = 'none';
             }
         });
 
