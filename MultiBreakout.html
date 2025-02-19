@@ -240,25 +240,55 @@
             if (ballPosition.y <= 30 && ballPosition.x >= paddlePositions.top && ballPosition.x <= paddlePositions.top + 120) {
                 ballSpeed.y = -ballSpeed.y;
                 ballPosition.y = 30; // Prevent ball from entering paddle
-                ballSpeed.x += (ballPosition.x - (paddlePositions.top + 60)) * 0.2; // Adjust angle
+                ballSpeed.x += (ballPosition.x - (paddlePositions.top + 60)) * 0.1; // Adjust angle
+                const speed = Math.sqrt(ballSpeed.x ** 2 + ballSpeed.y ** 2);
+                if (speed > 2) {
+                    ballSpeed.x = (ballSpeed.x / speed) * 2;
+                    ballSpeed.y = (ballSpeed.y / speed) * 2;
+                }
             }
 
             if (ballPosition.y >= gameContainer.clientHeight - 50 && ballPosition.x >= paddlePositions.bottom && ballPosition.x <= paddlePositions.bottom + 120) {
                 ballSpeed.y = -ballSpeed.y;
                 ballPosition.y = gameContainer.clientHeight - 50; // Prevent ball from entering paddle
                 ballSpeed.x += (ballPosition.x - (paddlePositions.bottom + 60)) * 0.1; // Adjust angle
+                const speed = Math.sqrt(ballSpeed.x ** 2 + ballSpeed.y ** 2);
+                if (speed > 2) {
+                    ballSpeed.x = (ballSpeed.x / speed) * 2;
+                    ballSpeed.y = (ballSpeed.y / speed) * 2;
+                }
             }
 
             if (ballPosition.x <= 30 && ballPosition.y >= paddlePositions.left && ballPosition.y <= paddlePositions.left + 120) {
                 ballSpeed.x = -ballSpeed.x;
                 ballPosition.x = 30; // Prevent ball from entering paddle
-                ballSpeed.y += (ballPosition.y - (paddlePositions.left + 60)) * 0.2; // Adjust angle
+                ballSpeed.y += (ballPosition.y - (paddlePositions.left + 60)) * 0.1; // Adjust angle
+                const speed = Math.sqrt(ballSpeed.x ** 2 + ballSpeed.y ** 2);
+                if (speed > 2) {
+                    ballSpeed.x = (ballSpeed.x / speed) * 2;
+                    ballSpeed.y = (ballSpeed.y / speed) * 2;
+                }
             }
 
             if (ballPosition.x >= gameContainer.clientWidth - 50 && ballPosition.y >= paddlePositions.right && ballPosition.y <= paddlePositions.right + 120) {
                 ballSpeed.x = -ballSpeed.x;
                 ballPosition.x = gameContainer.clientWidth - 50; // Prevent ball from entering paddle
                 ballSpeed.y += (ballPosition.y - (paddlePositions.right + 60)) * 0.1; // Adjust angle
+                const speed = Math.sqrt(ballSpeed.x ** 2 + ballSpeed.y ** 2);
+                if (speed > 2) {
+                    ballSpeed.x = (ballSpeed.x / speed) * 2;
+                    ballSpeed.y = (ballSpeed.y / speed) * 2;
+                }
+            }
+
+            // Check if the ball is stuck in a corner
+            if ((ballPosition.x <= 30 && ballPosition.y <= 30) ||
+                (ballPosition.x >= gameContainer.clientWidth - 50 && ballPosition.y <= 30) ||
+                (ballPosition.x <= 30 && ballPosition.y >= gameContainer.clientHeight - 50) ||
+                (ballPosition.x >= gameContainer.clientWidth - 50 && ballPosition.y >= gameContainer.clientHeight - 50)) {
+                // Adjust the ball's direction to escape the corner
+                ballSpeed.x = -ballSpeed.x;
+                ballSpeed.y = -ballSpeed.y;
             }
 
             // Collision with bricks
